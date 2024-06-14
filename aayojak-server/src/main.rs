@@ -1,8 +1,8 @@
 use std::{collections::HashMap, sync::Mutex};
 
 use aayojak_server::services::{
-    base,
-    service_todo::{self, AppState, TodoList},
+    base::{self, AppState},
+    service_todo::{self, TodoList},
 };
 use actix_web::{web, App, HttpServer};
 

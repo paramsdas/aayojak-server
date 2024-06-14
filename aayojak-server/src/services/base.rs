@@ -1,4 +1,12 @@
+use std::sync::Mutex;
+
 use actix_web::{get, post, HttpResponse, Responder};
+
+use super::service_todo::TodoList;
+
+pub struct AppState {
+    pub todo_list: Mutex<TodoList>,
+}
 
 // Base endpoints
 #[get("/")]
