@@ -1,4 +1,4 @@
-use std::{collections::HashMap, num::ParseIntError, sync::Mutex};
+use std::{collections::HashMap, num::ParseIntError};
 
 use aayojak_lib::Todo;
 use actix_web::{delete, get, post, web, HttpRequest, HttpResponse, Responder};
