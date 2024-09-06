@@ -10,8 +10,3 @@ pub async fn welcome() -> impl Responder {
 pub async fn echo(req_body: String) -> impl Responder {
     HttpResponse::Ok().body(req_body)
 }
-
-#[get("")]
-pub async fn api_version() -> impl Responder {
-    HttpResponse::Ok().body("v0.0.2")
-}

@@ -32,7 +32,6 @@ async fn main() -> std::io::Result<()> {
             .app_data(pg_connection_webdata.clone())
             .service(
                 web::scope("/api")
-                    .service(base::api_version)
                     .service(create_todo)
                     .service(get_all_todos),
             )
