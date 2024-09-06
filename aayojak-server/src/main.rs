@@ -1,31 +1,40 @@
-use std::{collections::HashMap, sync::Mutex};
+use std::{env, sync::Mutex};
 
-use aayojak_server::services::{
-    base::{self, AppState},
-    service_todo::{self, TodoList},
+use aayojak_server::{
+    db::postgres_connection,
+    services::{
+        base::{self},
+        service_todo::{create_todo::create_todo, read_todo::get_all_todos},
+    },
+    state::app_state::AppState,
 };
-use actix_web::{web, App, HttpServer};
+use actix_web::{middleware, web, App, HttpServer};
+use dotenvy::dotenv;
 
 // MAIN SERVER
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let todo_list = web::Data::new(AppState {
-        todo_list: Mutex::new(TodoList {
-            map: HashMap::new(),
-            id_counter: 0,
-        }),
+    dotenv().ok();
+
+    let pg_url = env::var("DATABASE_URL").expect("DATABASE_URL not found [REQUIRED]");
+    let pg_connection = postgres_connection::establish_postgres_connection(&pg_url);
+    let pg_connection_webdata = web::Data::new(AppState {
+        pg_connection: Mutex::new(pg_connection),
     });
 
     HttpServer::new(move || {
         App::new()
+            .wrap(middleware::NormalizePath::new(
+                middleware::TrailingSlash::Trim,
+            ))
             .service(base::welcome)
             .service(base::echo)
-            .app_data(todo_list.clone())
+            .app_data(pg_connection_webdata.clone())
             .service(
                 web::scope("/api")
-                    .service(service_todo::create_todo)
                     .service(base::api_version)
-                    .service(service_todo::get_all_todos),
+                    .service(create_todo)
+                    .service(get_all_todos),
             )
     })
     .bind(("127.0.0.1", 8080))?
