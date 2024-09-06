@@ -9,5 +9,13 @@
   ],
   "enabledManagers": ["cargo"],
   "gitAuthor": "Renovate Bot <renovate-bot@aayojak.paramsdas.com>",
-  "osvVulnerabilityAlerts": true
+  "osvVulnerabilityAlerts": true,
+  "packageRules": [
+    {
+      "matchBaseBranches": ["main"],
+      "matchFileNames": ["**/Cargo.toml"],
+      "matchManagers": ["cargo"],
+      "matchUpdateTypes": ["major", "minor", "patch"]
+     }
+  ]
 }
