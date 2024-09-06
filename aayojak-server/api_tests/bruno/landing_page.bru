@@ -1,0 +1,26 @@
+meta {
+  name: landing_page
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8080
+  body: none
+  auth: none
+}
+
+body:text {
+  asdasdadsa
+}
+
+tests {
+  test("validate_status", function(){
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("validate_body", function(){
+    const data = res.getBody();
+    expect(data).to.equal("Welcome to aayojak!");
+  });
+}
