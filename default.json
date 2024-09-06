@@ -1,0 +1,12 @@
+{
+  "hostRules": [
+    {
+      "matchHost": "https://github.com/paramsdas/aayojak-server",
+      "token": "{{ secrets.GITHUB_ACCESS_TOKEN }}",
+      "timeout": "10000"
+    }
+  ],
+  "enabledManagers": ["cargo"],
+  "gitAuthor": "Renovate Bot renovate-bot@aayojak.paramsdas.com",
+  "osvVulnerabilityAlerts": "true"
+}

@@ -3,3 +3,4 @@
 .vscode/*
 **/test_scrap/
 **/*.env
+config.js
