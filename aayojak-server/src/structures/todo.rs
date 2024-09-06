@@ -97,11 +97,11 @@ impl Todo {
     /// # Examples
     ///
     /// ```
-    /// use aayojak_lib::structures::todo::Todo;
-    /// let todo = Todo::new("Test", 1);
+    /// use aayojak_server::structures::todo::Todo;
+    /// let todo = Todo::new("Test", Some(1));
     ///
     /// assert_eq!(todo.title(), "Test");
-    /// assert_eq!(*todo.id(), 1 as i32);
+    /// assert_eq!(*todo.id(), Some(1));
     /// ```
     ///
     pub fn new(title: &str, id: Option<i64>) -> Self {
