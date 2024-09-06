@@ -8,6 +8,6 @@
     }
   ],
   "enabledManagers": ["cargo"],
-  "gitAuthor": "Renovate Bot renovate-bot@aayojak.paramsdas.com",
+  "gitAuthor": "Renovate Bot <renovate-bot@aayojak.paramsdas.com>",
   "osvVulnerabilityAlerts": true
 }
