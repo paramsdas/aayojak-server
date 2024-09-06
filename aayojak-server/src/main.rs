@@ -6,7 +6,7 @@ use aayojak_server::{
         base::{self},
         service_todo::{create_todo::create_todo, read_todo::get_all_todos},
     },
-    state::app_state::AppState,
+    structures::app_state::AppState,
 };
 use actix_web::{middleware, web, App, HttpServer};
 use dotenvy::dotenv;

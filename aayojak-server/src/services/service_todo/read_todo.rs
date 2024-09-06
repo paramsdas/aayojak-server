@@ -4,7 +4,7 @@ use diesel::{QueryDsl, RunQueryDsl, SelectableHelper};
 use std::num::ParseIntError;
 use std::ops::DerefMut;
 
-use crate::state::app_state::AppState;
+use crate::structures::app_state::AppState;
 
 use crate::schema::todos::dsl::*;
 

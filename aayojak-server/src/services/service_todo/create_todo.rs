@@ -5,7 +5,7 @@ use actix_web::{post, web, HttpResponse, Responder};
 use diesel::dsl::insert_into;
 use diesel::RunQueryDsl;
 
-use crate::state::app_state::AppState;
+use crate::structures::app_state::AppState;
 
 use crate::schema::todos::dsl::*;
 
