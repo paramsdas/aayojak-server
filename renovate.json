@@ -12,7 +12,7 @@
   "osvVulnerabilityAlerts": true,
   "packageRules": [
     {
-      "matchBaseBranches": ["main"],
+      "matchBaseBranches": ["master"],
       "matchFileNames": ["**/Cargo.toml"],
       "matchManagers": ["cargo"],
       "matchUpdateTypes": ["major", "minor", "patch"]
