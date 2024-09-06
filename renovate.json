@@ -6,7 +6,6 @@
   "packageRules": [
     {
       "matchBaseBranches": ["master"],
-      "matchFileNames": ["**/Cargo.toml"],
       "matchManagers": ["cargo"],
       "matchUpdateTypes": ["major", "minor", "patch"]
      }
