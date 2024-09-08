@@ -15,11 +15,11 @@ body:text {
 }
 
 tests {
-  test("validate_status", function(){
+  test("validate-status", function(){
     expect(res.getStatus()).to.equal(200);
   });
   
-  test("validate_body", function(){
+  test("validate-body", function(){
     const data = res.getBody();
     expect(data).to.equal("Welcome to aayojak!");
   });

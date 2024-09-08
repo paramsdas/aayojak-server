@@ -1,0 +1,23 @@
+meta {
+  name: echo
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/echo
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Hello world"
+  }
+}
+
+tests {
+  test("validate-response", function(){
+    expect(res.body.title).to.equal("Hello world")
+  })
+}

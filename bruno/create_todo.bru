@@ -1,0 +1,47 @@
+meta {
+  name: create_todo
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8080/api/todo/create
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "hello world",
+    "date_deadline": "2000-07-23T00:00:00",
+    "description": "test description"
+  }
+}
+
+tests {
+  test("validate-response_status", function(){
+    expect(res.status).to.equal(200);
+  });
+  test("validate-id_not_null", function(){
+    expect(res.body.id).to.not.equal(null);
+  });
+  test("validate-title", function(){
+    expect(res.body.title).to.equal("hello world");
+  });
+  test("validate-completion_status", function(){
+    expect(res.body.completion_status).to.equal(false);
+  });
+  test("validate-auto_created_dates_not_null", function(){
+    expect(res.body.date_created).to.not.equal(null);
+    expect(res.body.date_modified).to.not.equal(null);
+  });
+  test("validate-description", function(){
+    expect(res.body.description).to.equal("test description");
+  });
+  test("validate-date_completed_null", function(){
+    expect(res.body.date_completed).to.equal(null);
+  });
+  test("validate-date_deadline", function(){
+    expect(res.body.date_deadline).to.equal("2000-07-23T00:00:00");
+  });
+}

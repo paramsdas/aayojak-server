@@ -1,4 +1,4 @@
-use crate::structures::todo::Todo;
+use crate::structures::todos::todo::Todo;
 use actix_web::{get, web, HttpRequest, HttpResponse, Responder};
 use diesel::{QueryDsl, RunQueryDsl, SelectableHelper};
 use std::num::ParseIntError;

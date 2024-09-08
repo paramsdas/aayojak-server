@@ -8,7 +8,7 @@ use aayojak_server::{
     },
     structures::app_state::AppState,
 };
-use actix_web::{middleware, web, App, HttpServer};
+use actix_web::{error, middleware, web, App, HttpResponse, HttpServer};
 
 // MAIN SERVER
 #[actix_web::main]
@@ -20,12 +20,25 @@ async fn main() -> std::io::Result<()> {
     });
 
     HttpServer::new(move || {
+        let json_config = web::JsonConfig::default()
+            .limit(4096)
+            .error_handler(|err, _req| {
+                // create custom error response
+                error::InternalError::from_response(
+                    "",
+                    HttpResponse::BadRequest()
+                        .content_type("application/json")
+                        .body(format!(r#"{{"error":"{}"}}"#, err)),
+                )
+                .into()
+            });
         App::new()
             .wrap(middleware::NormalizePath::new(
                 middleware::TrailingSlash::Trim,
             ))
             .service(base::welcome)
             .service(base::echo)
+            .app_data(json_config)
             .app_data(pg_connection_webdata.clone())
             .service(
                 web::scope("/api")

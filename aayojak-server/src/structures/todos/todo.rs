@@ -55,27 +55,31 @@ impl Todo {
         &self.date_modified
     }
     /// get todo description, if set
-    pub fn description(&self) -> &Option<String> {
-        &self.description
+    pub fn description(&self) -> Option<&str> {
+        self.description.as_deref()
     }
     /// get the completion date, if set
-    pub fn date_completed(&self) -> &Option<NaiveDateTime> {
-        &self.date_completed
+    pub fn date_completed(&self) -> Option<&NaiveDateTime> {
+        self.date_completed.as_ref()
     }
     /// get the deadline date, if set
-    pub fn date_deadline(&self) -> &Option<NaiveDateTime> {
-        &self.date_deadline
+    pub fn date_deadline(&self) -> Option<&NaiveDateTime> {
+        self.date_deadline.as_ref()
     }
 
     // setters
     /// set todo title
-    pub fn set_title(&mut self, title: &str) {
-        self.title = String::from(title);
+    pub fn set_title(&mut self, title: String) {
+        self.title = title;
         self.update_date_modified();
     }
     /// set todo description
-    pub fn set_description(&mut self, description: &str) {
-        self.description = Some(String::from(description));
+    pub fn set_description(&mut self, description: Option<&str>) {
+        let mut description_string_option = None;
+        if let Some(desc) = description {
+            description_string_option = Some(String::from(desc));
+        }
+        self.description = description_string_option;
         self.update_date_modified();
     }
     /// set the completion date
@@ -97,22 +101,32 @@ impl Todo {
     /// # Examples
     ///
     /// ```
-    /// use aayojak_server::structures::todo::Todo;
-    /// let todo = Todo::new("Test", Some(1));
+    /// use aayojak_server::structures::todos::todo::Todo;
+    /// let todo = Todo::new("Test", Some(1), Some("test_description"), None);
     ///
     /// assert_eq!(todo.title(), "Test");
-    /// assert_eq!(*todo.id(), Some(1));
+    /// assert_eq!(todo.id(), &Some(1));
+    /// assert_eq!(todo.description().unwrap(), "test_description")
     /// ```
     ///
-    pub fn new(title: &str, id: Option<i64>) -> Self {
+    pub fn new(
+        title: &str,
+        id: Option<i64>,
+        description: Option<&str>,
+        date_deadline: Option<NaiveDateTime>,
+    ) -> Self {
         let date_time = Utc::now().naive_utc();
+        let mut description_string_option = None;
+        if let Some(desc) = description {
+            description_string_option = Some(String::from(desc));
+        }
         Todo {
             title: String::from(title),
             id,
-            description: None,
+            description: description_string_option,
             date_created: date_time,
             date_modified: date_time,
-            date_deadline: None,
+            date_deadline,
             date_completed: None,
             completion_status: false,
         }

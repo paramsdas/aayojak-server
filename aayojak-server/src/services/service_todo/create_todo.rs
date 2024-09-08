@@ -1,6 +1,7 @@
 use std::ops::DerefMut;
 
-use crate::structures::todo::Todo;
+use crate::structures::todos::rb_create_todo::RequestBodyCreateTodo;
+use crate::structures::todos::todo::Todo;
 use actix_web::{post, web, HttpResponse, Responder};
 use diesel::dsl::insert_into;
 use diesel::RunQueryDsl;
@@ -12,7 +13,7 @@ use crate::schema::todos::dsl::*;
 /// Create todo
 #[post("/todo/create")]
 pub async fn create_todo(
-    todo_request: web::Json<Todo>,
+    todo_request: web::Json<RequestBodyCreateTodo>,
     data: web::Data<AppState>,
 ) -> impl Responder {
     let app_state_result = data.pg_connection.lock();
@@ -26,7 +27,13 @@ pub async fn create_todo(
         Ok(mut pg_connection_guard) => {
             let pg_connection = pg_connection_guard.deref_mut();
             println!("Creating todo...");
-            let todo = todo_request.0;
+            let todo_request = todo_request.0;
+            let todo = Todo::new(
+                &todo_request.title,
+                None,
+                todo_request.description.as_deref(),
+                todo_request.date_deadline,
+            );
             let inserted_todo_result = insert_into(todos)
                 .values(&todo)
                 .get_result::<Todo>(pg_connection);
