@@ -13,11 +13,20 @@ use actix_web::{error, middleware, web, App, HttpResponse, HttpServer};
 // MAIN SERVER
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    let host = env::var("HOST_ADDRESS").unwrap_or_else(|_| {
+        println!("HOST_ADDRESS env not set, using 127.0.0.1");
+        "127.0.0.1".to_string()
+    });
+    let port = 8080;
+    println!("getting pg_url");
     let pg_url = env::var("DATABASE_URL").expect("DATABASE_URL not found [REQUIRED]");
+    println!("connecting to database");
     let pg_connection = postgres_connection::establish_postgres_connection(&pg_url);
     let pg_connection_webdata = web::Data::new(AppState {
         pg_connection: Mutex::new(pg_connection),
     });
+
+    println!("Listening on host {host} and port {port} ...");
 
     HttpServer::new(move || {
         let json_config = web::JsonConfig::default()
@@ -46,7 +55,7 @@ async fn main() -> std::io::Result<()> {
                     .service(get_all_todos),
             )
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind((host, 8080))?
     .run()
     .await
 }

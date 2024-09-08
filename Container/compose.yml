@@ -1,0 +1,41 @@
+services:
+  db:
+    image: paramsdas/aayojak_db:latest
+    ports:
+      - "5432:5432"
+    env_file:
+      - path: ./postgres.env
+        required: true
+    networks:
+      - aayojak-network
+    volumes:
+      - "./session_data:/var/lib/aayojak/db/data"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready",
+          "-U",
+          "$${POSTGRES_USER}",
+          "-d",
+          "$${POSTGRES_USER}",
+        ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+  aayojak-server:
+    image: paramsdas/aayojak_server:latest
+    ports:
+      - "8080:8080"
+    env_file:
+      - path: ./aayojak.env
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - aayojak-network
+
+networks:
+  aayojak-network:
