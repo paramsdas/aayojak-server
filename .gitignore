@@ -3,3 +3,4 @@
 **/session_data/
 **/*.env
 config.js
+local

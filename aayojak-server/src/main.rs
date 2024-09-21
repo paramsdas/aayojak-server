@@ -4,7 +4,12 @@ use aayojak_server::{
     db::postgres_connection,
     services::{
         base::{self},
-        service_todo::{create_todo::create_todo, read_todo::get_all_todos},
+        service_todo::{
+            create_todo::create_todo,
+            delete_todo::delete_todo_by_id,
+            read_todo::{get_all_todos, get_todo_by_id},
+            update_todo::update_todo,
+        },
     },
     structures::app_state::AppState,
 };
@@ -52,7 +57,10 @@ async fn main() -> std::io::Result<()> {
             .service(
                 web::scope("/api")
                     .service(create_todo)
-                    .service(get_all_todos),
+                    .service(get_all_todos)
+                    .service(get_todo_by_id)
+                    .service(delete_todo_by_id)
+                    .service(update_todo),
             )
     })
     .bind((host, 8080))?

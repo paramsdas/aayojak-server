@@ -1,6 +1,6 @@
 use chrono::{NaiveDateTime, Utc};
 use diesel::{
-    prelude::{Identifiable, Insertable, Queryable},
+    prelude::{AsChangeset, Identifiable, Insertable, Queryable},
     Selectable,
 };
 use serde::{Deserialize, Serialize};
@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 ///
 /// All time related structs/instances work with UTC.
 #[derive(
-    Default, Debug, Queryable, Selectable, Identifiable, Insertable, Serialize, Deserialize,
+    Debug, Queryable, Selectable, Identifiable, Insertable, AsChangeset, Serialize, Deserialize,
 )]
 #[diesel(table_name = crate::schema::todos)]
 #[diesel(primary_key(id))]
@@ -91,7 +91,13 @@ impl Todo {
         self.date_completed = date_deadline;
     }
     /// set the completion status
-    pub fn set_completion_status(&mut self, is_completed: bool) {
+    pub fn set_completion_status(&mut self, is_completed: bool, update_date_completed: bool) {
+        if update_date_completed {
+            match self.completion_status {
+                true => self.set_date_completed(Some(Utc::now().naive_utc())),
+                false => self.set_date_completed(None),
+            }
+        }
         self.completion_status = is_completed;
         self.update_date_modified();
     }
@@ -137,14 +143,7 @@ impl Todo {
     /// if completion status will be toggled to true and will delete the
     /// completion date if completion status will be toggled to false
     pub fn toggle_completion_status(&mut self, update_date_completed: bool) {
-        if update_date_completed {
-            match self.completion_status {
-                true => self.set_date_completed(None),
-                false => self.set_date_completed(Some(Utc::now().naive_utc())),
-            }
-        }
-        self.completion_status = !self.completion_status;
-        self.update_date_modified();
+        self.set_completion_status(!self.completion_status(), update_date_completed)
     }
 
     // private functions

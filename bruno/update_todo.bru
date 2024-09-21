@@ -1,0 +1,26 @@
+meta {
+  name: update_todo
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8080/api/todo/update/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "completion_status": true
+  }
+}
+
+tests {
+  test("validate-response_status", function(){
+    expect(res.status).to.equal(200);
+  });
+  test("validate-id_not_null", function(){
+    expect (res.body).to.equal(1);
+  });
+}
