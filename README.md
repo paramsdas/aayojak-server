@@ -1,3 +1,15 @@
 # Aayojak Server
 
-Backend server written using actix and uses components from the [library](https://github.com/paramsdas/aayojak-lib "aayojak-lib")
+Aayojak is a basic todo-tool written in Rust. It uses Postgres as its database. This repository holds the code for Aayojak's backend.
+
+## Open Todos
+
+### Improve Testing
+
+- Unit tests
+- Integration tests
+
+### Interlinking Todos
+
+- Create a model to interlink todos
+- Implement the model
