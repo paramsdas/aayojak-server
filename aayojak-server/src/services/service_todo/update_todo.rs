@@ -64,13 +64,11 @@ pub async fn update_todo(
             }
 
             let mut existing_todo = existing_todo_result.unwrap();
+            let mut description_allow_none_overwrite = false;
+            let mut date_deadline_allow_none_overwrite = false;
 
             if todo_request_body.title.is_some() {
                 existing_todo.set_title(todo_request_body.title.unwrap());
-            }
-
-            if todo_request_body.description.is_some() {
-                existing_todo.set_description(todo_request_body.description.as_deref());
             }
 
             if todo_request_body.completion_status.is_some() {
@@ -78,9 +76,37 @@ pub async fn update_todo(
                     .set_completion_status(todo_request_body.completion_status.unwrap(), true);
             }
 
+            if todo_request_body.description_ano.is_some() {
+                description_allow_none_overwrite = todo_request_body.description_ano.unwrap();
+            }
+
+            if todo_request_body.date_deadline_ano.is_some() {
+                date_deadline_allow_none_overwrite = todo_request_body.date_deadline_ano.unwrap();
+            }
+
+            match todo_request_body.description {
+                Some(todo_des) => existing_todo.set_description(Some(&todo_des[..])),
+                None => {
+                    if description_allow_none_overwrite {
+                        existing_todo.set_description(None)
+                    }
+                }
+            }
+
+            match todo_request_body.date_deadline {
+                Some(todo_date_deadline) => {
+                    existing_todo.set_date_deadline(Some(todo_date_deadline))
+                }
+                None => {
+                    if date_deadline_allow_none_overwrite {
+                        existing_todo.set_date_deadline(None)
+                    }
+                }
+            }
+
             let updated_todo_result = diesel::update(todos::table())
                 .set(existing_todo)
-                .execute(pg_connection);
+                .get_result::<Todo>(pg_connection);
 
             match updated_todo_result {
                 // parse result into string for the response

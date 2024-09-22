@@ -12,6 +12,7 @@ use serde::{Deserialize, Serialize};
     Debug, Queryable, Selectable, Identifiable, Insertable, AsChangeset, Serialize, Deserialize,
 )]
 #[diesel(table_name = crate::schema::todos)]
+#[diesel(treat_none_as_null = true)]
 #[diesel(primary_key(id))]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Todo {
@@ -88,17 +89,17 @@ impl Todo {
     }
     /// set the deadline date
     pub fn set_date_deadline(&mut self, date_deadline: Option<NaiveDateTime>) {
-        self.date_completed = date_deadline;
+        self.date_deadline = date_deadline;
     }
     /// set the completion status
     pub fn set_completion_status(&mut self, is_completed: bool, update_date_completed: bool) {
+        self.completion_status = is_completed;
         if update_date_completed {
             match self.completion_status {
                 true => self.set_date_completed(Some(Utc::now().naive_utc())),
                 false => self.set_date_completed(None),
             }
         }
-        self.completion_status = is_completed;
         self.update_date_modified();
     }
 
