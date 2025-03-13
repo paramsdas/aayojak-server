@@ -11,5 +11,8 @@ dev_db:
 stop_dev_db:
 	docker container stop dev_db pgadmin
 
+dev_server_dependencies:
+	sudo apt-get update && sudo apt install libpq-dev
+
 dev_server:
 	DATABASE_URL=postgres://test:test@host.docker.internal:5432/aayojak cargo run --manifest-path ./aayojak-server/Cargo.toml

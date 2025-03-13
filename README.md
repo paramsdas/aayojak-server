@@ -15,8 +15,9 @@ Aayojak is a basic todo-tool written in Rust. It uses Postgres as its database. 
 
 1. Navigate to the root directory
 2. Run `make dev_db`
-3. Run `make dev_server` -> blocks terminal
-4. API should now be accessible at [localhost:8080](http://localhost:8080)
+3. Install libpq-dev. For Ubuntu, run `make dev_server_dependencies` (one-time step)
+4. Run `make dev_server` -> blocks terminal
+5. API should now be accessible at [localhost:8080](http://localhost:8080)
 
 #### Cleanup
 
